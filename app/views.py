@@ -61,9 +61,7 @@ def player_search_name():
         return JSONEncoder().encode(player)
     else:
         player_data = json.loads(request.data)
-        pprint(player_data)
         # 预处理player变量 纠正变量类型
         adjust_player_data(player_data)
-        pprint(player_data)
         Player.player_find_and_replace_by_id(player_data["_id"], player_data)
         return "1"
