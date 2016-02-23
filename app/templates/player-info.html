@@ -1,0 +1,107 @@
+{% extends "base.html" %}
+
+{% block scripts %}
+    {{ super() }}
+    <script type="text/javascript" src="static/player-info.js"></script>
+{% endblock %}
+
+{% block content %}
+
+<div class="container" ng-app="playerApp" ng-controller="playerController">
+    <div class="page-header">
+        <h1>player info page</h1>
+    </div>
+
+    <div class="row head">
+        <div class="col-lg-3">
+            <div class="input-group">
+                <input type="text" class="form-control" placeholder="name" ng-model="searchName">
+                <span class="input-group-btn">
+                    <button class="btn btn-info" type="button" ng-click="searchAction()"><span class="glyphicon glyphicon-search"></span></button>
+                </span>
+            </div>
+        </div>
+    </div>
+    {% for message in get_flashed_messages() %}
+    <div class="alert alert-warning">
+        <button type="button" class="close" data-dismiss="alert">&times;</button>
+        {{ message }}
+    </div>
+    {% endfor %}
+
+    <div ng-show="mainVis">
+        <form ng-submit="submit()">
+
+            {{single_form_fields|safe}}
+
+            {{double_level_fields|safe}}
+
+            <!-- buildings -->
+            <fieldset class="form-group">
+                <label for="buildings">buildings</label>
+                <a id="buildings" ng-click="toggleBuildings()">data</a>
+                <div ng-show = "buildingsVis">
+                    <div ng-repeat="(key, value) in data.buildings">
+                        <label>{[key]}</label>
+                        <a ng-click="toggleBuilding(key)">data</a>
+                        <button class="btn-danger" type="button" ng-click="deleteBuilding(key)"><span class="glyphicon glyphicon-remove"></span></button>
+
+                        <div ng-show="buildingVis[key]" ng-repeat="(subkey, subvalue) in value">
+                            <label>{[subkey]}</label>
+                            <input class="form-control" ng-model="data.buildings[key][subkey]">
+                        </div>
+                    </div>
+
+                    <button type="button" class="btn-success" data-toggle="modal" data-target="#myModal">
+                        <span class="glyphicon glyphicon-plus"></span>
+                    </button>
+
+                    <!-- Modal -->
+                    <div class="modal fade" id="buildingModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                      <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                          <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                            <h4 class="modal-title" id="buildingModalLabel">增加建筑</h4>
+                          </div>
+                          <div class="modal-body">
+                              pos_id: <input type="text" ng-model="newBuildingPos">
+                              construct_id: <input type="text" ng-model="newBuildingId">
+                              level: <input type="text" ng-model="newBuildingLevel">
+                          </div>
+                          <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                            <button type="button" class="btn btn-primary" ng-click="addBuilding()">Save changes</button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                </div>
+            </fieldset>
+
+            <!-- resource -->
+            <fieldset class="form-group">
+                <label for="resource">resource</label>
+                <a id="resource" ng-click="toggleResource()">data</a>
+                <div ng-show = "resourceVis">
+                    <div ng-repeat="(key, value) in data.resource">
+                        <label>{[key]}</label>
+                        <input type="number" class="form-control" ng-model="data.resource[key]">
+                    </div>
+                </div>
+            </fieldset>
+
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+
+        <!--<fieldset class="form-group">-->
+            <!--<label for="name">name</label>-->
+            <!--<input type="text" class="form-control" id="name" ng-model="test">-->
+        <!--</fieldset>-->
+
+    </div>
+
+
+</div>
+{% endblock %}
