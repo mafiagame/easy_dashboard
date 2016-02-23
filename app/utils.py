@@ -19,6 +19,13 @@ def adjust_player_data(player_data):
         player_data["buildings"][pos]["construct_id"] = int(player_data["buildings"][pos]["construct_id"])
         player_data["buildings"][pos]["level"] = int(player_data["buildings"][pos]["level"])
 
+    # resource
+    for resource_type in player_data["resource"]:
+        if resource_type == "updated":
+            player_data["resource"][resource_type] = int(player_data["resource"][resource_type])
+        else:
+            player_data["resource"][resource_type] = float(player_data["resource"][resource_type])
+
 
 def create_single_form_fields():
     ret = ""
