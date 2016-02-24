@@ -57,8 +57,8 @@ def create_single_form_fields():
     }
     field_template = u'''
     <fieldset class="form-group">
-        <label for="TITLE">DESC</label>
-        <input type="TYPE" class="form-control" id="TITLE" ng-model="data.TITLE">
+        <label class="single_level_label" for="TITLE">DESC:</label>
+        <input type="TYPE" id="TITLE" ng-model="data.TITLE">
     </fieldset>
     '''
     # player = Player.player_test()
