@@ -21,7 +21,7 @@ def adjust_player_data(player_data):
 
     # resource
     for resource_type in player_data["resource"]:
-        if resource_type == "updated":
+        if resource_type in ["updated", "diamond"]:
             player_data["resource"][resource_type] = int(player_data["resource"][resource_type])
         else:
             player_data["resource"][resource_type] = float(player_data["resource"][resource_type])
