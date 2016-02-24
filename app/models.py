@@ -22,6 +22,10 @@ class Player(MyModel):
         return player
 
     @classmethod
+    def player_find_by_id(cls, _id):
+        return cls.collection.find_one({"_id": _id})
+
+    @classmethod
     def player_find_by_name(cls, name):
         return cls.collection.find_one({"name": name})
 

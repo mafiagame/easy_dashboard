@@ -13,11 +13,12 @@ class JSONEncoder(json.JSONEncoder):
 
 def adjust_player_data(player_data):
     player_data["_id"] = ObjectId(player_data["_id"])
-
+    new_player = Player.player_find_by_id(player_data["_id"])
     # buildings
-    for pos in player_data["buildings"]:
-        player_data["buildings"][pos]["construct_id"] = int(player_data["buildings"][pos]["construct_id"])
-        player_data["buildings"][pos]["level"] = int(player_data["buildings"][pos]["level"])
+    player_data["buildings"] = new_player["buildings"]
+    # for pos in player_data["buildings"]:
+    #     player_data["buildings"][pos]["construct_id"] = int(player_data["buildings"][pos]["construct_id"])
+    #     player_data["buildings"][pos]["level"] = int(player_data["buildings"][pos]["level"])
 
     # resource
     for resource_type in player_data["resource"]:
