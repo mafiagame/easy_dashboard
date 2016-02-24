@@ -177,7 +177,8 @@ def create_double_level_fields():
         <a class="click-open" id="TITLE" ng-click="TOGGLE_ACTION()">data</a>
         <div ng-show = "ANGULAR_SHOW">
             <div ng-repeat="(key, value) in ANGULAR_FIELD">
-                {[key]}: <input type="number" ng-model="ANGULAR_FIELD[key]">
+                <label class="double_level_label">{[key]}:</label>
+                <input type="number" ng-model="ANGULAR_FIELD[key]">
                 <a class="click-delete" ng-click="DELETE_ACTION(key)">delete</a>
             </div>
             <button type="button" class="btn-success" data-toggle="modal" data-target="#ANGULAR_MODAL">

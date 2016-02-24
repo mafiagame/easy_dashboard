@@ -64,4 +64,4 @@ def player_search_name():
         # 预处理player变量 纠正变量类型
         adjust_player_data(player_data)
         Player.player_find_and_replace_by_id(player_data["_id"], player_data)
-        return "1"
+        return ""
