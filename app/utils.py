@@ -174,12 +174,11 @@ def create_double_level_fields():
     field_template = '''
     <fieldset class="form-group">
         <label for="TITLE">DESC</label>
-        <a id="TITLE" ng-click="TOGGLE_ACTION()">data</a>
+        <a class="click-open" id="TITLE" ng-click="TOGGLE_ACTION()">data</a>
         <div ng-show = "ANGULAR_SHOW">
             <div ng-repeat="(key, value) in ANGULAR_FIELD">
-                <label>{[key]}</label>
-                <button class="btn-danger" type="button" ng-click="DELETE_ACTION(key)"><span class="glyphicon glyphicon-remove"></span></button>
-                <input type="number" class="form-control" ng-model="ANGULAR_FIELD[key]">
+                {[key]}: <input type="number" ng-model="ANGULAR_FIELD[key]">
+                <a class="click-delete" ng-click="DELETE_ACTION(key)">delete</a>
             </div>
             <button type="button" class="btn-success" data-toggle="modal" data-target="#ANGULAR_MODAL">
                 <span class="glyphicon glyphicon-plus"></span>
@@ -206,6 +205,7 @@ def create_double_level_fields():
           </div>
         </div>
     </fieldset>
+    <hr>
     '''
     for field in _list:
         content = field_template

@@ -5,11 +5,16 @@
     <script type="text/javascript" src="static/player-info.js"></script>
 {% endblock %}
 
+{% block head %}
+    {{ super() }}
+    <link rel="stylesheet" type="text/css" href="static/css/player-info.css" />
+{% endblock %}
+
 {% block content %}
 
 <div class="container" ng-app="playerApp" ng-controller="playerController">
     <div class="page-header">
-        <h1>player info page</h1>
+        <h1>玩家信息页</h1>
     </div>
 
     <div class="row head">
@@ -28,23 +33,24 @@
         {{ message }}
     </div>
     {% endfor %}
+    <br>
 
-    <div ng-show="mainVis">
+    <div id="main" ng-show="mainVis">
         <form ng-submit="submit()">
 
             {{single_form_fields|safe}}
-
+            <br>
             {{double_level_fields|safe}}
 
             <!-- buildings -->
             <fieldset class="form-group">
                 <label for="buildings">建筑</label>
-                <a id="buildings" ng-click="toggleBuildings()">data</a>
+                <a class="click-open" id="buildings" ng-click="toggleBuildings()">data</a>
                 <div ng-show = "buildingsVis">
                     <div ng-repeat="(key, value) in data.buildings">
                         <label>{[key]}</label>
-                        <a ng-click="toggleBuilding(key)">data</a>
-                        <button class="btn-danger" type="button" ng-click="deleteBuilding(key)"><span class="glyphicon glyphicon-remove"></span></button>
+                        <a class="click-open" ng-click="toggleBuilding(key)">data</a>
+                        <a class="click-delete" ng-click="deleteBuilding(key)">delete</a>
 
                         <div ng-show="buildingVis[key]" ng-repeat="(subkey, subvalue) in value">
                             <label ng-if="subkey == 'construct_id'">建筑id</label>
@@ -81,11 +87,12 @@
 
                 </div>
             </fieldset>
+            <hr>
 
             <!-- resource -->
             <fieldset class="form-group">
                 <label for="resource">资源</label>
-                <a id="resource" ng-click="toggleResource()">data</a>
+                <a class="click-open" id="resource" ng-click="toggleResource()">data</a>
                 <div ng-show = "resourceVis">
                     <div ng-repeat="(key, value) in data.resource">
                         <label ng-if="key == 'diamond'">钻石</label>
@@ -99,16 +106,17 @@
                     </div>
                 </div>
             </fieldset>
+            <hr>
 
             <!-- map_collections -->
             <fieldset class="form-group">
                 <label for="map-coll">地图收藏</label>
-                <a id="map-coll" ng-click="toggleMapColls()">data</a>
+                <a class="click-open" id="map-coll" ng-click="toggleMapColls()">data</a>
                 <div ng-show = "mapCollsVis">
                     <div ng-repeat="item in data.map_collections">
                         <label>{[item.name]}</label>
-                        <a ng-click="toggleMapColl(item.name)">data</a>
-                        <button class="btn-danger" type="button" ng-click="deleteMapColl($index)"><span class="glyphicon glyphicon-remove"></span></button>
+                        <a class="click-open" ng-click="toggleMapColl(item.name)">data</a>
+                        <a class="click-delete" ng-click="deleteMapColl($index)">delete</a>
                         <div ng-show="mapCollVis[item.name]">
                             <label>名称</label>
                             <input type="text" class="form-control" ng-model="item.name">
@@ -154,8 +162,9 @@
                     </div>
                 </div>
             </fieldset>
-
+            <br>
             <button type="submit" class="btn btn-primary">Submit</button>
+            <br>
         </form>
 
         <!--<fieldset class="form-group">-->
