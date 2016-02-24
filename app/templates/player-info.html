@@ -38,7 +38,7 @@
 
             <!-- buildings -->
             <fieldset class="form-group">
-                <label for="buildings">buildings</label>
+                <label for="buildings">建筑</label>
                 <a id="buildings" ng-click="toggleBuildings()">data</a>
                 <div ng-show = "buildingsVis">
                     <div ng-repeat="(key, value) in data.buildings">
@@ -47,12 +47,14 @@
                         <button class="btn-danger" type="button" ng-click="deleteBuilding(key)"><span class="glyphicon glyphicon-remove"></span></button>
 
                         <div ng-show="buildingVis[key]" ng-repeat="(subkey, subvalue) in value">
-                            <label>{[subkey]}</label>
-                            <input class="form-control" ng-model="data.buildings[key][subkey]">
+                            <label ng-if="subkey == 'construct_id'">建筑id</label>
+                            <label ng-if="subkey == 'level'">建筑等级</label>
+                            <!--<label>{[subkey]}</label>-->
+                            <input ng-if="subkey == 'construct_id' || subkey == 'level'" class="form-control" ng-model="data.buildings[key][subkey]">
                         </div>
                     </div>
 
-                    <button type="button" class="btn-success" data-toggle="modal" data-target="#myModal">
+                    <button type="button" class="btn-success" data-toggle="modal" data-target="#buildingModal">
                         <span class="glyphicon glyphicon-plus"></span>
                     </button>
 
@@ -65,9 +67,9 @@
                             <h4 class="modal-title" id="buildingModalLabel">增加建筑</h4>
                           </div>
                           <div class="modal-body">
-                              pos_id: <input type="text" ng-model="newBuildingPos">
-                              construct_id: <input type="text" ng-model="newBuildingId">
-                              level: <input type="text" ng-model="newBuildingLevel">
+                              建筑位: <input type="text" ng-model="newBuildingPos">
+                              建筑id: <input type="text" ng-model="newBuildingId">
+                              建筑等级: <input type="text" ng-model="newBuildingLevel">
                           </div>
                           <div class="modal-footer">
                             <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
@@ -82,12 +84,73 @@
 
             <!-- resource -->
             <fieldset class="form-group">
-                <label for="resource">resource</label>
+                <label for="resource">资源</label>
                 <a id="resource" ng-click="toggleResource()">data</a>
                 <div ng-show = "resourceVis">
                     <div ng-repeat="(key, value) in data.resource">
-                        <label>{[key]}</label>
+                        <label ng-if="key == 'diamond'">钻石</label>
+                        <label ng-if="key == 'aluminium'">煤</label>
+                        <label ng-if="key == 'oil'">油</label>
+                        <label ng-if="key == 'silicon'">铀</label>
+                        <label ng-if="key == 'crystal'">可燃冰</label>
+                        <label ng-if="key == 'iron'">钢矿</label>
+                        <label ng-if="key == 'updated'">更新时间</label>
                         <input type="text" class="form-control" ng-model="data.resource[key]">
+                    </div>
+                </div>
+            </fieldset>
+
+            <!-- map_collections -->
+            <fieldset class="form-group">
+                <label for="map-coll">地图收藏</label>
+                <a id="map-coll" ng-click="toggleMapColls()">data</a>
+                <div ng-show = "mapCollsVis">
+                    <div ng-repeat="item in data.map_collections">
+                        <label>{[item.name]}</label>
+                        <a ng-click="toggleMapColl(item.name)">data</a>
+                        <button class="btn-danger" type="button" ng-click="deleteMapColl($index)"><span class="glyphicon glyphicon-remove"></span></button>
+                        <div ng-show="mapCollVis[item.name]">
+                            <label>名称</label>
+                            <input type="text" class="form-control" ng-model="item.name">
+                            <label>分类</label>
+                            <input type="number" class="form-control" ng-model="item.category">
+                            <label>等级</label>
+                            <input type="number" class="form-control" ng-model="item.lv">
+                            <label>类型</label>
+                            <input type="text" class="form-control" ng-model="item.type">
+                            <label>x</label>
+                            <input type="number" class="form-control" ng-model="item.x">
+                            <label>y</label>
+                            <input type="number" class="form-control" ng-model="item.y">
+                        </div>
+                    </div>
+
+                    <button type="button" class="btn-success" data-toggle="modal" data-target="#mapCollModal">
+                        <span class="glyphicon glyphicon-plus"></span>
+                    </button>
+
+                    <!-- Modal -->
+                    <div class="modal fade" id="mapCollModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                      <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                          <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                            <h4 class="modal-title" id="mapCollModalLabel">增加地图收藏</h4>
+                          </div>
+                          <div class="modal-body">
+                              名称: <input type="text" ng-model="newMapCollName">
+                              分类: <input type="number" ng-model="newMapCollCat">
+                              等级: <input type="number" ng-model="newMapCollLv">
+                              类型: <input type="text" ng-model="newMapCollType">
+                              x: <input type="number" ng-model="newMapCollX">
+                              y: <input type="number" ng-model="newMapCollY">
+                          </div>
+                          <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                            <button type="button" class="btn btn-primary" ng-click="addMapColl()">Save changes</button>
+                          </div>
+                        </div>
+                      </div>
                     </div>
                 </div>
             </fieldset>

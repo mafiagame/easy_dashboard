@@ -24,6 +24,7 @@ playerApp.controller("playerController", function($scope, $http){
         for(key in $scope.data.buildings){
           $scope.buildingVis[key] = false;
         };
+        $scope.mapCollVis = {};
       }
     });
   };
@@ -155,6 +156,52 @@ playerApp.controller("playerController", function($scope, $http){
 
 //
 
+//******************payment_time*******************
+//添加技能事件
+  $scope.addPayment = function(){
+    var payment_id = $scope.newPaymentId
+    if(payment_id in $scope.data.payment_time){
+      alert("该单位已存在");
+    }else{
+      $scope.data.payment_time[payment_id] = $scope.newPaymentNum;
+      $('#paymentModal').modal('hide');
+    }
+  };
+
+//删除技能事件
+  $scope.deletePayment = function(key){
+    delete $scope.data.payment_time[key]
+  }
+//显示隐藏技能逻辑
+  bindShowHide("paymentsVis", "togglePayments");
+
+//
+
+
+//******************map_collections*******************
+//添加map_collections事件
+  $scope.addMapColl = function(){
+    $scope.data.map_collections.push({
+      "name": $scope.newMapCollName,
+      "category": $scope.newMapCollCat,
+      "x": $scope.newMapCollX,
+      "y": $scope.newMapCollY,
+      "type": $scope.newMapCollType,
+      "lv": $scope.newMapCollLv,
+    });
+    $('#mapCollModal').modal('hide');
+
+  };
+
+//删除map_collections事件
+  $scope.deleteMapColl = function(_index){
+    $scope.data.map_collections.splice(_index, 1);
+  }
+//显示隐藏map_collections逻辑
+  bindShowHide("mapCollsVis", "toggleMapColls");
+  $scope.toggleMapColl = function(key){
+    $scope.mapCollVis[key] = $scope.mapCollVis[key] ? false:true
+  };
 
 });
 
