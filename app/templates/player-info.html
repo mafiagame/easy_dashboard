@@ -36,7 +36,7 @@
     <br>
 
     <div id="main" ng-show="mainVis">
-        <form ng-submit="submit()">
+        <form name="mainForm" id="mainForm">
 
             {{single_form_fields|safe}}
             <br>
@@ -44,46 +44,45 @@
 
             <!-- buildings -->
             <fieldset class="form-group">
-                <label for="buildings">建筑</label>
-                <a class="click-open" id="buildings" ng-click="toggleBuildings()">data</a>
+                <a class="click-open" ng-click="toggleBuildings()">建筑</a>
                 <div ng-show = "buildingsVis">
                     <div ng-repeat="(key, value) in data.buildings">
-                        <label>{[key]}</label>
-                        <a class="click-open" ng-click="toggleBuilding(key)">data</a>
-                        <a class="click-delete" ng-click="deleteBuilding(key)">delete</a>
+                        <a class="click-open" ng-click="toggleBuilding(key)">位置{[key]}</a>
+                        <!--<a class="click-delete" ng-click="deleteBuilding(key)">delete</a>-->
 
                         <div ng-show="buildingVis[key]" ng-repeat="(subkey, subvalue) in value">
-                            <label ng-if="subkey == 'construct_id'">建筑id</label>
-                            <label ng-if="subkey == 'level'">建筑等级</label>
+                            <label class="single_level_label" ng-if="subkey == 'construct_id'">建筑id:</label>
+                            <label class="single_level_label" ng-if="subkey == 'level'">建筑等级:</label>
                             <!--<label>{[subkey]}</label>-->
-                            <input ng-if="subkey == 'construct_id' || subkey == 'level'" class="form-control" ng-model="data.buildings[key][subkey]">
+                            <input ng-if="subkey == 'construct_id' || subkey == 'level'" ng-model="data.buildings[key][subkey]">
+                            <a ng-if="subkey == 'level'" class="click-save" ng-click="buildingLevelSave(key)"><span class="glyphicon glyphicon-floppy-save"></span></a>
                         </div>
                     </div>
 
-                    <button type="button" class="btn-success" data-toggle="modal" data-target="#buildingModal">
-                        <span class="glyphicon glyphicon-plus"></span>
-                    </button>
+                    <!--<button type="button" class="btn-success" data-toggle="modal" data-target="#buildingModal">-->
+                        <!--<span class="glyphicon glyphicon-plus"></span>-->
+                    <!--</button>-->
 
-                    <!-- Modal -->
-                    <div class="modal fade" id="buildingModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-                      <div class="modal-dialog" role="document">
-                        <div class="modal-content">
-                          <div class="modal-header">
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                            <h4 class="modal-title" id="buildingModalLabel">增加建筑</h4>
-                          </div>
-                          <div class="modal-body">
-                              建筑位: <input class="form-control" type="text" ng-model="newBuildingPos">
-                              建筑id: <input class="form-control" type="text" ng-model="newBuildingId">
-                              建筑等级: <input class="form-control" type="text" ng-model="newBuildingLevel">
-                          </div>
-                          <div class="modal-footer">
-                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                            <button type="button" class="btn btn-primary" ng-click="addBuilding()">Save changes</button>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
+                    <!--&lt;!&ndash; Modal &ndash;&gt;-->
+                    <!--<div class="modal fade" id="buildingModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">-->
+                      <!--<div class="modal-dialog" role="document">-->
+                        <!--<div class="modal-content">-->
+                          <!--<div class="modal-header">-->
+                            <!--<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>-->
+                            <!--<h4 class="modal-title" id="buildingModalLabel">增加建筑</h4>-->
+                          <!--</div>-->
+                          <!--<div class="modal-body">-->
+                              <!--建筑位: <input class="form-control" type="text" ng-model="newBuildingPos">-->
+                              <!--建筑id: <input class="form-control" type="text" ng-model="newBuildingId">-->
+                              <!--建筑等级: <input class="form-control" type="text" ng-model="newBuildingLevel">-->
+                          <!--</div>-->
+                          <!--<div class="modal-footer">-->
+                            <!--<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>-->
+                            <!--<button type="button" class="btn btn-primary" ng-click="addBuilding()">Save changes</button>-->
+                          <!--</div>-->
+                        <!--</div>-->
+                      <!--</div>-->
+                    <!--</div>-->
 
                 </div>
             </fieldset>
@@ -91,18 +90,18 @@
 
             <!-- resource -->
             <fieldset class="form-group">
-                <label for="resource">资源</label>
-                <a class="click-open" id="resource" ng-click="toggleResource()">data</a>
+                <a class="click-open" ng-click="toggleResource()">资源</a>
+                <a class="click-save" ng-click="singleSave('resource')"><span class="glyphicon glyphicon-floppy-save"></span></a>
                 <div ng-show = "resourceVis">
                     <div ng-repeat="(key, value) in data.resource">
-                        <label ng-if="key == 'diamond'">钻石</label>
-                        <label ng-if="key == 'aluminium'">煤</label>
-                        <label ng-if="key == 'oil'">油</label>
-                        <label ng-if="key == 'silicon'">铀</label>
-                        <label ng-if="key == 'crystal'">可燃冰</label>
-                        <label ng-if="key == 'iron'">钢矿</label>
-                        <label ng-if="key == 'updated'">更新时间</label>
-                        <input type="text" class="form-control" ng-model="data.resource[key]">
+                        <label class="single_level_label" ng-if="key == 'diamond'">钻石</label>
+                        <label class="single_level_label" ng-if="key == 'aluminium'">煤</label>
+                        <label class="single_level_label" ng-if="key == 'oil'">油</label>
+                        <label class="single_level_label" ng-if="key == 'silicon'">铀</label>
+                        <label class="single_level_label" ng-if="key == 'crystal'">可燃冰</label>
+                        <label class="single_level_label" ng-if="key == 'iron'">钢矿</label>
+                        <label class="single_level_label" ng-if="key == 'updated'">更新时间</label>
+                        <input type="number" ng-model="data.resource[key]">
                     </div>
                 </div>
             </fieldset>
@@ -110,26 +109,26 @@
 
             <!-- map_collections -->
             <fieldset class="form-group">
-                <label for="map-coll">地图收藏</label>
-                <a class="click-open" id="map-coll" ng-click="toggleMapColls()">data</a>
+                <a class="click-open" ng-click="toggleMapColls()">地图收藏</a>
+                <a class="click-save" ng-click="singleSave('map_collections')"><span class="glyphicon glyphicon-floppy-save"></span></a>
                 <div ng-show = "mapCollsVis">
                     <div ng-repeat="item in data.map_collections">
-                        <label>{[item.name]}</label>
-                        <a class="click-open" ng-click="toggleMapColl(item.name)">data</a>
+                        <a class="click-open" ng-click="toggleMapColl(item.name)">{[item.name]}</a>
                         <a class="click-delete" ng-click="deleteMapColl($index)">delete</a>
                         <div ng-show="mapCollVis[item.name]">
-                            <label>名称</label>
-                            <input type="text" class="form-control" ng-model="item.name">
-                            <label>分类</label>
-                            <input type="number" class="form-control" ng-model="item.category">
-                            <label>等级</label>
-                            <input type="number" class="form-control" ng-model="item.lv">
-                            <label>类型</label>
-                            <input type="text" class="form-control" ng-model="item.type">
-                            <label>x</label>
-                            <input type="number" class="form-control" ng-model="item.x">
-                            <label>y</label>
-                            <input type="number" class="form-control" ng-model="item.y">
+                            <label class="double_level_label">名称:</label>
+                            <input type="text" ng-model="item.name"><br>
+                            <label class="double_level_label">分类:</label>
+                            <input type="number" ng-model="item.category"><br>
+                            <label class="double_level_label">等级:</label>
+                            <input type="number" ng-model="item.lv"><br>
+                            <label class="double_level_label">类型:</label>
+                            <input type="text" ng-model="item.type"><br>
+                            <label class="double_level_label">X:</label>
+                            <input type="number" ng-model="item.x"><br>
+                            <label class="double_level_label">Y:</label>
+                            <input type="number" ng-model="item.y">
+                            <hr>
                         </div>
                     </div>
 
@@ -162,9 +161,9 @@
                     </div>
                 </div>
             </fieldset>
-            <br>
-            <button type="submit" class="btn btn-primary">Submit</button>
-            <br>
+            <hr>
+            <!--<button type="submit" class="btn btn-primary">Submit</button>-->
+            <!--<br>-->
         </form>
 
         <!--<fieldset class="form-group">-->

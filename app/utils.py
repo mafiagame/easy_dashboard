@@ -32,11 +32,27 @@ def adjust_player_data(player_data):
         player_data["resource_delta"][resource_type] = float(player_data["resource_delta"][resource_type])
 
 
+def adjust_single_data(data):
+    data["_id"] = ObjectId(data["_id"])
+    key = data["key"]
+    if key == "resource":
+        for resource_type in data["value"]:
+            if resource_type in ["updated", "diamond"]:
+                data["value"][resource_type] = int(data["value"][resource_type])
+            else:
+                data["value"][resource_type] = float(data["value"][resource_type])
+    elif key in single_list:
+        if key == "name":
+            data["value"] = str(data["value"])
+        else:
+            data["value"] = int(data["value"])
+    elif key in double_list:
+        for _id in data["value"]:
+            data["value"][_id] = int(data["value"][_id])
 
-def create_single_form_fields():
-    ret = ""
 
-    _list = {
+
+single_list = {
         "name": {"type": basestring, "desc": u"名称"},
         "sex": {"type": int, "desc": u"性别"},
         "avatar": {"type": int, "desc": u"头像"},
@@ -56,15 +72,21 @@ def create_single_form_fields():
         "recharge_score": {'type': int, 'desc': u"充值钻石总数"},
         "total_pay_time": {"type": int, "desc": u"总支付次数"},
     }
+
+
+def create_single_form_fields():
+    ret = ""
+
     field_template = u'''
     <fieldset class="form-group">
         <label class="single_level_label" for="TITLE">DESC:</label>
-        <input type="TYPE" id="TITLE" ng-model="data.TITLE">
+        <input name="TITLE" ng-pattern="CUSTOM_PATTERN" type="TYPE" id="TITLE" ng-model="data.TITLE">
+        <a class="click-save" ng-click="singleSave('TITLE')"><span class="glyphicon glyphicon-floppy-save"></span></a>
     </fieldset>
     '''
     # player = Player.player_test()
-    for field in _list:
-        item = _list[field]
+    for field in single_list:
+        item = single_list[field]
         desc = item["desc"]
         content = field_template
 
@@ -74,6 +96,7 @@ def create_single_form_fields():
             _type = "checkbox"
         elif item["type"] is int:
             _type = "number"
+            content = content.replace("CUSTOM_PATTERN", "onlyNumbers")
         else:
             continue
 
@@ -84,11 +107,7 @@ def create_single_form_fields():
 
     return ret
 
-
-def create_double_level_fields():
-    ret = ""
-
-    _list = {
+double_list = {
         "units": {
             "TITLE" : "units",
             "TOGGLE_ACTION" : "toggleUnits",
@@ -168,18 +187,22 @@ def create_double_level_fields():
 
             "ANGULAR_KEY" : "newPaymentId",
             "ANGULAR_VALUE" : "newPaymentNum",
-            "DESC": u"付费项目的购买次数"
+            "DESC": u"付费购买"
         },
     }
 
+
+def create_double_level_fields():
+    ret = ""
+
     field_template = '''
     <fieldset class="form-group">
-        <label for="TITLE">DESC</label>
-        <a class="click-open" id="TITLE" ng-click="TOGGLE_ACTION()">data</a>
+        <a class="click-open" ng-click="TOGGLE_ACTION()">DESC</a>
+        <a class="click-save" ng-click="singleSave('TITLE')"><span class="glyphicon glyphicon-floppy-save"></span></a>
         <div ng-show = "ANGULAR_SHOW">
             <div ng-repeat="(key, value) in ANGULAR_FIELD">
                 <label class="double_level_label">{[key]}:</label>
-                <input type="number" ng-model="ANGULAR_FIELD[key]">
+                <input ng-pattern="onlynumbers" type="number" ng-model="ANGULAR_FIELD[key]">
                 <a class="click-delete" ng-click="DELETE_ACTION(key)">delete</a>
             </div>
             <button type="button" class="btn-success" data-toggle="modal" data-target="#ANGULAR_MODAL">
@@ -196,7 +219,7 @@ def create_double_level_fields():
                 <h4 class="modal-title" id="myModalLabel">new item</h4>
               </div>
               <div class="modal-body">
-                  TEXT_KEY: <input type="text" ng-model="ANGULAR_KEY">
+                  TEXT_KEY: <input type="text" ng-pattern="/^[1-9][0-9]{0,2}$/" ng-model="ANGULAR_KEY">
                   TEXT_VALUE: <input type="number" ng-model="ANGULAR_VALUE">
               </div>
               <div class="modal-footer">
@@ -209,9 +232,9 @@ def create_double_level_fields():
     </fieldset>
     <hr>
     '''
-    for field in _list:
+    for field in double_list:
         content = field_template
-        substitution = _list[field]
+        substitution = double_list[field]
         for item in substitution:
             content = content.replace(item, substitution[item])
 

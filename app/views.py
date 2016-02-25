@@ -65,3 +65,32 @@ def player_search_name():
         adjust_player_data(player_data)
         Player.player_find_and_replace_by_id(player_data["_id"], player_data)
         return ""
+
+
+@app.route("/player-single-save", methods=["POST"])
+@login_required
+def player_single_save():
+    data = json.loads(request.data)
+    adjust_single_data(data)
+    Player.player_update_single_field(data)
+    player = Player.player_find_by_id(data["_id"])
+    return JSONEncoder().encode(player)
+
+
+@app.route("/player-building-save", methods=["POST"])
+@login_required
+def player_building_save():
+    data = json.loads(request.data)
+    data["_id"] = ObjectId(data["_id"])
+    data["building_lv"] = int(data["building_lv"])
+    Player.collection.update_one({"_id": data["_id"]}, {"$set": {"buildings.%s.level" % data["building_pos"]: data["building_lv"]}})
+    player = Player.player_find_by_id(data["_id"])
+    return JSONEncoder().encode(player)
+
+
+
+
+
+
+
+

@@ -32,3 +32,7 @@ class Player(MyModel):
     @classmethod
     def player_find_and_replace_by_id(cls, _id, _dict):
         return cls.collection.replace_one({"_id": _id}, _dict)
+
+    @classmethod
+    def player_update_single_field(cls, data):
+        return cls.collection.update_one({"_id": data["_id"]}, {"$set": {data["key"]: data["value"]}})
