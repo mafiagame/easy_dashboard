@@ -3,6 +3,8 @@
 {% block scripts %}
     {{ super() }}
     <script type="text/javascript" src="static/angular.min.js"></script>
+    <script type="text/javascript" src="static/angular-route.min.js"></script>
+    {{ moment.include_moment() }}
 {% endblock %}
 
 {% block title %}easy_dashboard{% endblock %}
@@ -21,11 +23,10 @@
         </div>
         <div class="navbar-collapse collapse">
             <ul class="nav navbar-nav">
-                <li><a href="/">充值消费统计</a></li>
-                <li><a href="/">流失留存统计</a></li>
-                <li><a href="/">注册创角在线</a></li>
                 <li><a href="/">ip地区分析</a></li>
-                <li><a href="/">公告封禁补偿</a></li>
+                <li><a href="/">封禁</a></li>
+                <li><a href="/compensate-info">补偿</a></li>
+                <li><a href="/announce-info">公告</a></li>
                 <li><a href="/player-info">玩家信息查询</a></li>
             </ul>
             <ul class="nav navbar-nav navbar-right">

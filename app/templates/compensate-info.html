@@ -1,0 +1,125 @@
+{% extends "base.html" %}
+{% import "elements/pagination.html" as macros %}
+
+{% block scripts %}
+    {{ super() }}
+    <script type="text/javascript" src="static/compensate.js"></script>
+{% endblock %}
+
+{% block head %}
+    {{ super() }}
+    <link rel="stylesheet" type="text/css" href="static/css/compensate.css" />
+{% endblock %}
+
+{% block content %}
+<div class="container" ng-app="compensateApp" ng-controller="compensateController">
+    <div class="page-header">
+        <h1>补偿页</h1>
+    </div>
+
+    <div class="panel panel-info">
+        <div class="panel-heading">
+            <h3 class="panel-title">发送补偿</h3>
+        </div>
+        <div class="panel-body">
+            <form ng-submit="formSubmit()">
+                <fieldset class="form-group">
+                    <label class="double_level_label">备注:</label>
+                    <input type="text" ng-model="comment">
+                </fieldset>
+
+                <fieldset class="form-group">
+                    <label class="double_level_label">钻石:</label>
+                    <input type="number" ng-model="diamond">
+                </fieldset>
+
+                <fieldset class="form-group">
+                    <label class="double_level_label">士兵:</label>
+                    <button type="button" class="btn-success" data-toggle="modal" data-target="#unitModal">
+                        <span class="glyphicon glyphicon-plus"></span>
+                    </button>
+                    <div ng-repeat="(key, value) in units">
+                        <label class="double_level_label">{[key]}:</label>
+                        <input ng-pattern="onlynumbers" type="number" ng-model="units[key]">
+                        <a class="click-delete" ng-click="deleteUnit(key)">delete</a>
+                    </div>
+                    <!-- Modal -->
+                    <div class="modal fade" id="unitModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                      <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                          <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                            <h4 class="modal-title" id="myModalLabel">new item</h4>
+                          </div>
+                          <div class="modal-body">
+                              士兵id: <input type="text" ng-pattern="/^[1-9][0-9]{0,2}$/" ng-model="newUnitId">
+                              士兵数量: <input type="number" ng-model="newUnitNum">
+                          </div>
+                          <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                            <button type="button" class="btn btn-primary" ng-click="addUnit()">Save changes</button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                </fieldset>
+
+                <fieldset class="form-group">
+                    <label class="double_level_label">物品:</label>
+                    <button type="button" class="btn-success" data-toggle="modal" data-target="#itemModal">
+                        <span class="glyphicon glyphicon-plus"></span>
+                    </button>
+                    <div ng-repeat="(key, value) in items">
+                        <label class="double_level_label">{[key]}:</label>
+                        <input ng-pattern="onlynumbers" type="number" ng-model="items[key]">
+                        <a class="click-delete" ng-click="deleteItem(key)">delete</a>
+                    </div>
+                    <!-- Modal -->
+                    <div class="modal fade" id="itemModal" tabindex="-1" role="dialog" aria-labelledby="itemModalLabel">
+                      <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                          <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                            <h4 class="modal-title" id="itemModalLabel">new item</h4>
+                          </div>
+                          <div class="modal-body">
+                              物品id: <input type="text" ng-pattern="/^[1-9][0-9]{0,2}$/" ng-model="newItemId">
+                              物品数量: <input type="number" ng-model="newItemNum">
+                          </div>
+                          <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                            <button type="button" class="btn btn-primary" ng-click="addItem()">Save changes</button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                </fieldset>
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </form>
+        </div>
+    </div>
+
+    <div class="panel panel-info">
+        <div class="panel-heading">
+            <h3 class="panel-title">补偿历史</h3>
+        </div>
+
+        <div class="panel-body">
+            <div >
+                {% for compensate in compensates %}
+                <div class="blog-post">
+                    <h3 class="blog-post-title">{{compensate.comment}}</h3>
+                    <p class="blog-post-meta">{{ moment(compensate.timestamp).fromNow(refresh=True) }} by <a href="#">{{compensate.author.username}}</a></p>
+                    <p>{{ compensate.content }}</p>
+                </div>
+                <hr>
+                {% endfor %}
+            </div>
+
+            <div class="pagination">
+                {{ macros.pagination_widget(pagination, "compensate_info") }}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,17 @@
+.click-delete {
+    margin-left: 15px;
+    color: #C32828;
+}
+.double_level_label {
+    display: inline-block;
+    width: 34px;
+    text-align: left;
+}
+.single_level_label {
+    display: inline-block;
+    width: 100px;
+    text-align: left;
+}
+
+.btn-success {
+    margin-top: 5px;

@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+{% import "elements/pagination.html" as macros %}
+
+{% block scripts %}
+    {{ super() }}
+    <script type="text/javascript" src="static/announcement.js"></script>
+{% endblock %}
+
+{% block head %}
+    {{ super() }}
+    <link rel="stylesheet" type="text/css" href="static/css/announcement.css" />
+{% endblock %}
+
+{% block content %}
+<div class="container" ng-app="announceApp" ng-controller="announceController">
+    <div class="page-header">
+        <h1>公告页</h1>
+    </div>
+
+    <div class="panel panel-info">
+        <div class="panel-heading">
+            <h3 class="panel-title">发送公告</h3>
+        </div>
+        <!--<div class="btn-group" role="group" aria-label="...">-->
+          <!--<button type="button" class="btn btn-default" ng-click="showSend()">发送公告</button>-->
+          <!--<button type="button" class="btn btn-default" ng-click="showHistory()">历史记录</button>-->
+        <!--</div>-->
+
+
+        <div class="panel-body">
+            <form ng-submit="announceSubmit()">
+                <fieldset class="form-group">
+                    <label for="announce-title">公告标题</label>
+                    <input id="announce-title" type="text" class="form-control" ng-model="announceTitle">
+                </fieldset>
+                <fieldset class="form-group">
+                    <label for="announce-content">公告内容</label>
+                    <textarea class="form-control" rows="5" id="announce-content" ng-model="announceContent"></textarea>
+                </fieldset>
+                <button type="submit" class="btn btn-primary">发送</button>
+            </form>
+            <hr>
+        </div>
+    </div>
+
+    <div class="panel panel-info">
+        <div class="panel-heading">
+            <h3 class="panel-title">公告历史</h3>
+        </div>
+
+        <div class="panel-body">
+            <div >
+                {% for announce in announces %}
+                <div class="blog-post">
+                    <h3 class="blog-post-title">{{announce.title}}</h3>
+                    <p class="blog-post-meta">{{ moment(announce.timestamp).fromNow(refresh=True) }} by <a href="#">{{announce.author.username}}</a></p>
+                    <p>{{ announce.content }}</p>
+                </div>
+                <hr>
+                {% endfor %}
+            </div>
+
+            <div class="pagination">
+                {{ macros.pagination_widget(pagination, "announce_info") }}
+            </div>
+        </div>
+    </div>
+
+
+</div>
+{% endblock %}

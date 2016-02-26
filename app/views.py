@@ -1,13 +1,15 @@
 # coding:utf-8
+from datetime import datetime
 import json
 from pprint import pprint
-from app import app, login_manager
-from app.admin_models import User
+from app import app, login_manager, login_db
+from app.admin_models import User, Announce, Compensate
 from app.forms import LoginForm
 from app.models import Player
+from app.gameapi import *
 from app.utils import *
 from flask import render_template, request, redirect, url_for, flash
-from flask_login import login_required, login_user, logout_user
+from flask_login import login_required, login_user, logout_user, current_user
 
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -88,9 +90,44 @@ def player_building_save():
     return JSONEncoder().encode(player)
 
 
+@app.route("/announce-info")
+@login_required
+def announce_info():
+    page = request.args.get('page', 1, type=int)
+    pagination = Announce.query.order_by(Announce.timestamp.desc()).paginate(page, per_page=5, error_out=False)
+    announces = pagination.items
+    return render_template("announcement.html", announces=announces, pagination=pagination)
 
 
+@app.route("/announce-send", methods=["POST"])
+@login_required
+def announce_send():
+    data = json.loads(request.data)
+    # send_announce_to_players(data["announce_title"], data["announce_content"])
+    announce = Announce(title=data["announce_title"], content=data["announce_content"], author_id=current_user.id)
+    login_db.session.add(announce)
+    login_db.session.commit()
+
+    return ""
 
 
+@app.route("/compensate-info")
+@login_required
+def compensate_info():
+    page = request.args.get('page', 1, type=int)
+    pagination = Compensate.query.order_by(Compensate.timestamp.desc()).paginate(page, per_page=5, error_out=False)
+    compensates = pagination.items
+
+    return render_template("compensate-info.html", compensates=compensates, pagination=pagination)
 
 
+@app.route("/compensate-send", methods=["POST"])
+@login_required
+def compensate_send():
+    data = json.loads(request.data)
+    Player.player_compensate(data)
+    compensate = Compensate(comment=data["comment"], content=request.data, author_id=current_user.id)
+    login_db.session.add(compensate)
+    login_db.session.commit()
+
+    return ""
